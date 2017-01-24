@@ -1,0 +1,23 @@
+The commands I used to create the output:
+
+1) Make the pdf image black and white with Imagemagick:
+
+convert -density 300 canvas.pdf -threshold 25% -type bilevel -compress fax ous1.png
+
+
+2) Follow the tutorial steps posted at ocropy readme.md
+
+# perform binarization
+./ocropus-nlbin tests/ous1.png -o book
+
+# perform page layout analysis
+./ocropus-gpageseg 'book1/????.bin.png'
+
+# perform text line recognition (on four cores, with a fraktur model)
+./ocropus-rpred -Q 4 -m models/fraktur.pyrnn.gz 'book1/????/??????.bin.png'
+
+# generate HTML output
+./ocropus-hocr 'book1/????.bin.png' -o ous1.html
+
+# display the output
+firefox ous1.html
